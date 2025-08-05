@@ -80,4 +80,4 @@ Bu UNC yolundaki klasöre erişim olup olmadığı kontrol edilir. Erişim yoksa
 
 ## 📷 Arayüzden Görüntü
 
-> (Ekran görüntüsü buraya eklenebilir)
+![Arayüz Görseli](ss.png)
