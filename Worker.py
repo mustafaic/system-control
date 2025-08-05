@@ -1,5 +1,4 @@
 import os
-
 import requests
 from PyQt5.QtCore import QThread
 from PyQt5.QtCore import pyqtSignal
@@ -31,34 +30,10 @@ class Worker(QThread):
 
 
     def file_check(self, unc_path: str, name):
-        if not unc_path.startswith(r"\\"):
-            print("Geçersiz UNC yolu formatı.")
-            return
-
-        try:
-            server_name = unc_path.split("\\")[2]
-        except IndexError:
-            print("UNC yolundan sunucu adı alınamadı.")
-            return
-
-        try:
-            socket.gethostbyname(server_name)
-        except socket.gaierror:
-            print("Sunucu adı çözülemedi. (Bağlantı sorunu veya yanlış ad)")
-            return
+        result = False
 
         if os.path.exists(unc_path):
             print("UNC klasörüne erişim başarılı.")
-            return True
-        else:
-            error_code = ctypes.windll.kernel32.GetLastError()
+            result = True
 
-            if error_code == 5:
-                print("Erişim reddedildi. (Yetki sorunu)")
-            elif error_code == 53:
-                print("Ağ yolu bulunamadı. (Sunucuya erişilemiyor)")
-            elif error_code == 67:
-                print("Ağ adı bulunamadı. (Yanlış paylaşım adı)")
-            else:
-                print(f"️ UNC yoluna erişilemedi. Hata kodu: {error_code}")
-
+        self.update_signal.emit(name, result)
